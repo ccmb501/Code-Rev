@@ -10,8 +10,11 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.lang import Builder
 from dropbox_file_util import Tracker, Alert_Sender
-import time
 import alert_json
+import time
+from plyer import notification
+import json
+import threading
 
 # ======================================== DEBUG STUFF =============================================
 class loginScreen(App):
@@ -221,8 +224,31 @@ class AlertScreen(Screen):
             alert_time = alert_json.current_time()
             alert = alert_json.format_alert(0, LoginScreen.r, alert, LoginScreen.n, alert_time)
             os.send_alert(alert, alert_time, LoginScreen.n)
-            #time.sleep(send_period)
             sm.current = 'login'
+
+# check for alerts
+def alert_tracker():
+    iter = 0
+    while True:
+        iter += 1
+        print('Tracking Alerts #' + str(iter) + ":\n")
+        tracker = Tracker()
+        #Check x times
+        checks = 30
+        update_period = 1
+        for i in range(0, checks):
+            #print('Polling')
+            is_alert = tracker.poll()
+            if(is_alert):
+                alert = tracker.pull_last_file()
+                print('There is an alert: ', alert) #create notification
+                send_notification(alert)
+            time.sleep(update_period)
+
+# create notifications
+def send_notification(alert: str):
+    data = json.loads(alert)
+    notification.notify(title='Code Rev : Room '+ data[1], message=data[2] + '- '+data[3], app_name='coderev',timeout=20)
 
 # Create the screen manager
 sm = ScreenManager()
@@ -236,7 +262,14 @@ class MainApp(App):
 
 # run file
 if __name__ == '__main__':
-    MainApp().run()
+    #MainApp().run()
+    main = MainApp()
+    a = threading.Thread(target=main.run, name="one")
+    b = threading.Thread(target=alert_tracker, name="two")
+
+    a.start()
+    #b.start()
+    
 
 #loginScreen().run()
 #alertScreen().run()
