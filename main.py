@@ -7,7 +7,8 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
 from kivy.uix.togglebutton import ToggleButton
-from kivy.uix.screenmanager import Screen
+from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.lang import Builder
 
 class loginScreen(App):
 
@@ -86,5 +87,97 @@ class alertScreen(App):
             print(alert)
         self.alert.text = ""
 
+Builder.load_string("""
+<LoginScreen>:
+    FloatLayout:
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'bottom'
+            Button:
+                text: 'Login'
+                size_hint: (.25,.15)
+                on_press: todo
+        GridLayout:
+            cols: 2
+            Label:
+                text: 'Name'
+            Label:
+                text: 'Room #'
+            Label:
+                text: 'Residence Hall'
+            TextInput:
+                id: name
+                multiline: False
+            TextInput:
+                id: room
+                multiline: False
+            TextInput:
+                id: res_hall
+                multiline: False
+            Label:
+                text: ''
+            Label:
+                text: ''
+
+<AlertScreen>:
+    GridLayout:
+    rows: 3
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'center'
+            Button:
+                text: 'Send Alert'
+                size_hint: (.25,.15)
+                on_press: todo
+        GridLayout:
+            cols: 2
+            Label:
+                text: 'Alert Description'
+            TextInput:
+                id: alert
+                multiline: True
+            Label:
+                text: ''
+            Label:
+                text: ''
+        GridLayout:
+            cols = 5
+            ToggleButton:
+                text: 'Basement'
+                group: 'floor'
+            ToggleButton:
+                text: '1st Floor'
+                group: 'floor'
+                state: 'down'
+            ToggleButton:
+                text: '2nd Floor'
+                group: 'floor'
+            ToggleButton:
+                text: '3rd Floor'
+                group: 'floor'
+            ToggleButton:
+                text: 'All Floors'
+                group: 'floor'
+""")
+
+# Declare both screens
+class LoginScreen(Screen):
+    pass
+
+class AlertScreen(Screen):
+    pass
+
+# Create the screen manager
+sm = ScreenManager()
+sm.add_widget(LoginScreen(name='login'))
+sm.add_widget(AlertScreen(name='alert'))
+
+class MainApp(App):
+    def build(self):
+        return sm
+
+if __name__ == '__main__':
+    MainApp().run()
+
 #loginScreen().run()
-alertScreen().run()
+#alertScreen().run()
