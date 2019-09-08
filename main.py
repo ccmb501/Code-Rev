@@ -10,7 +10,7 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.lang import Builder
 
-# haha... ignore the 2 classes below...
+# ======================================== DEBUG STUFF =============================================
 class loginScreen(App):
 
     def build(self):
@@ -48,7 +48,6 @@ class loginScreen(App):
         self.username.text = ""
         self.room.text = ""
         self.res_hall.text = ""
-
 class alertScreen(App):
 
     def build(self):
@@ -87,6 +86,7 @@ class alertScreen(App):
         if len(alert) != 0:
             print(alert)
         self.alert.text = ""
+# ==================================================================================================
 
 # kv file for screens
 Builder.load_string("""
@@ -180,7 +180,7 @@ Builder.load_string("""
                 group: 'floor'
 """)
 
-# login validation
+# login validation (in the future, this would be populated by the names, rooms, and halls of all students)
 BuildingDict = {
         "mosher":{"spider man": "066",
         "doctor strange": "123",
@@ -202,7 +202,7 @@ class LoginScreen(Screen):
                         sm.current = 'alert'
                     else:
                         print("Try again...")
-            # print(name, room, hall)
+            # print(name, room, hall); TODO these values need to be carried over
 
 class AlertScreen(Screen):
     def sendAlert(self, alert):
@@ -215,10 +215,12 @@ sm = ScreenManager()
 sm.add_widget(LoginScreen(name='login'))
 sm.add_widget(AlertScreen(name='alert'))
 
+# main class
 class MainApp(App):
     def build(self):
         return sm
 
+# run file
 if __name__ == '__main__':
     MainApp().run()
 

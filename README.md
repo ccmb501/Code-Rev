@@ -1,5 +1,6 @@
 # Code-Rev
-# This is the README
-# There would normally be important info about this program here
-# Dropbox is c975801@urhen.com
-# Dropbox password is Password
+# HowdyHack 2019
+# This project is a system which allows students to send alerts to other students within their residence halls.
+
+Dropbox is c975801@urhen.com
+Dropbox password is Password
