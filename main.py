@@ -92,6 +92,11 @@ class alertScreen(App):
 Builder.load_string("""
 <LoginScreen>:
     FloatLayout:
+        canvas.before:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: "coderev.png"
         AnchorLayout:
             anchor_x: 'center'
             anchor_y: 'bottom'
@@ -103,16 +108,19 @@ Builder.load_string("""
             cols: 2
             Label:
                 text: 'Name'
+                color: 80, 0, 0, 1
             TextInput:
                 id: name
                 multiline: False
             Label:
                 text: 'Room #'
+                color: 80, 0, 0, 1
             TextInput:
                 id: room
                 multiline: False
             Label:
                 text: 'Residence Hall'
+                color: 80, 0, 0, 1
             TextInput:
                 id: hall
                 multiline: False
@@ -124,6 +132,11 @@ Builder.load_string("""
 <AlertScreen>:
     GridLayout:
         rows: 3
+        canvas.before:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: "ruhrohshaggy.jpg"
         AnchorLayout:
             anchor_x: 'center'
             anchor_y: 'center'
@@ -189,7 +202,7 @@ class LoginScreen(Screen):
 class AlertScreen(Screen):
     def sendAlert(self, alert):
         if len(alert) != 0:
-            print(alert) # TODO connect this with dropbox
+            print(alert) # TODO connect this with dropbox and replace print statement
             sm.current = 'login'
 
 # Create the screen manager
