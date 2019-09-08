@@ -1,0 +1,98 @@
+WindowManager:
+    MainWindow:
+    AlertScreen:
+
+<MainWindow>:
+    name: "main"
+
+    GridLayout:
+        cols:3
+
+        GridLayout:
+            cols: 2
+            Label:
+                text:"Name:"
+
+            TextInput:
+                id: name
+                multiline: False
+
+            Label:
+                text:"Room:"
+
+            TextInput:
+                id: room
+                multiline: False
+
+            Label:
+                text: "Residence Hall: "
+
+            TextInput:
+                id: hall
+                multiline: False
+
+            Button:
+                text: "Submit"
+                font_size: 12
+                on_release:
+                    app.root.current = "second" if hall.text == "mosher"  else "main"
+                    root.manager.transition.direction = "left"
+                    size: 25 ; 20
+                    size_hint: None; None
+
+
+
+
+<AlertScreen>:
+    name: "second"
+
+
+    GridLayout:
+        rows: 3
+
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'center'
+            Button:
+                text: 'Send Alert'
+                size_hint: (.25,.15)
+                on_press: todo
+
+        GridLayout:
+            cols: 2
+            Label:
+                text: 'Alert Description'
+
+            TextInput:
+                id: alert
+                multiline: True
+
+            Label:
+                text: ''
+
+            Label:
+                text: ''
+
+        GridLayout:
+            cols: 5
+
+            ToggleButton:
+                text: 'Basement'
+                group: 'floor'
+
+            ToggleButton:
+                text: '1st Floor'
+                group: 'floor'
+                state: 'down'
+
+            ToggleButton:
+                text: '2nd Floor'
+                group: 'floor'
+
+            ToggleButton:
+                text: '3rd Floor'
+                group: 'floor'
+
+            ToggleButton:
+                text: 'All Floors'
+                group: 'floor'
