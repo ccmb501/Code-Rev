@@ -9,6 +9,9 @@ from kivy.uix.widget import Widget
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.lang import Builder
+from dropbox_file_util import Tracker, Alert_Sender
+import time
+import alert_json
 
 # ======================================== DEBUG STUFF =============================================
 class loginScreen(App):
@@ -194,20 +197,31 @@ BuildingDict = {
 
 # Declare both screens
 class LoginScreen(Screen):
+    n = ""
+    r = ""
+    h = ""
     def login(self, name, room, hall):
         if len(name) != 0 and len(room) != 0 and len(hall) != 0:
             if hall in BuildingDict:
                 if name in BuildingDict["mosher"]:
                     if room == BuildingDict["mosher"][name]:
+                        n = name
+                        r = room
+                        h = hall
                         sm.current = 'alert'
                     else:
                         print("Try again...")
             # print(name, room, hall); TODO these values need to be carried over
 
 class AlertScreen(Screen):
+    send_period = 10
     def sendAlert(self, alert):
         if len(alert) != 0:
-            print(alert) # TODO connect this with dropbox and replace print statement
+            os = Alert_Sender()
+            alert_time = alert_json.current_time()
+            alert = alert_json.format_alert(0, LoginScreen.r, alert, LoginScreen.n, alert_time)
+            os.send_alert(alert, alert_time, LoginScreen.n)
+            #time.sleep(send_period)
             sm.current = 'login'
 
 # Create the screen manager
