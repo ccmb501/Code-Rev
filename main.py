@@ -15,6 +15,7 @@ import time
 from plyer import notification
 import json
 import threading
+from kivy.clock import Clock
 
 # ======================================== DEBUG STUFF =============================================
 class loginScreen(App):
@@ -228,27 +229,23 @@ class AlertScreen(Screen):
 
 # check for alerts
 def alert_tracker():
-    iter = 0
-    while True:
-        iter += 1
-        print('Tracking Alerts #' + str(iter) + ":\n")
-        tracker = Tracker()
-        #Check x times
-        checks = 30
-        update_period = 1
-        for i in range(0, checks):
-            #print('Polling')
-            is_alert = tracker.poll()
-            if(is_alert):
-                alert = tracker.pull_last_file()
-                print('There is an alert: ', alert) #create notification
-                send_notification(alert)
-            time.sleep(update_period)
+    print('Tracking Alerts')
+    tracker = Tracker()
+    is_alert = tracker.poll()
+    if(is_alert):
+        alert = tracker.pull_last_file()
+        #print(alert)
+        send_notification(alert)
+
+def alert_tracker_helper():
+    alert_tracker()
+    Clock.schedule_interval(alert_tracker_helper(), 5)
 
 # create notifications
 def send_notification(alert: str):
     data = json.loads(alert)
-    notification.notify(title='Code Rev : Room '+ data[1], message=data[2] + '- '+data[3], app_name='coderev',timeout=20)
+    print(data)
+    notification.notify(title='Code Rev : Room '+ data['room'], message=data['body'] + '- '+data['name'], app_name='coderev',timeout=20)
 
 # Create the screen manager
 sm = ScreenManager()
@@ -263,13 +260,15 @@ class MainApp(App):
 # run file
 if __name__ == '__main__':
     #MainApp().run()
-    main = MainApp()
-    a = threading.Thread(target=main.run, name="one")
-    b = threading.Thread(target=alert_tracker, name="two")
+    Clock.schedule_interval(alert_tracker_helper(), 5)
 
-    a.start()
-    #b.start()
-    
+    '''main = MainApp()
+    a = threading.Thread(target=main.run(), name="one")
+    b = threading.Thread(target=alert_tracker, name="two")
+    b.daemon
+
+    b.start()
+    a.start()''' 
 
 #loginScreen().run()
 #alertScreen().run()
