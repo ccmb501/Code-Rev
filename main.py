@@ -91,6 +91,10 @@ class alertScreen(App):
 # kv file for screens
 Builder.load_string("""
 <LoginScreen>:
+    on_leave:
+        name.text = ''
+        room.text = ''
+        hall.text = ''
     FloatLayout:
         canvas.before:
             Rectangle:
@@ -130,6 +134,7 @@ Builder.load_string("""
                 text: ''
 
 <AlertScreen>:
+    on_leave: alert.text = ''
     GridLayout:
         rows: 3
         canvas.before:
