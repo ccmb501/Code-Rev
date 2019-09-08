@@ -10,6 +10,7 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.lang import Builder
 
+# haha... ignore the 2 classes below...
 class loginScreen(App):
 
     def build(self):
@@ -87,6 +88,7 @@ class alertScreen(App):
             print(alert)
         self.alert.text = ""
 
+# kv file for screens
 Builder.load_string("""
 <LoginScreen>:
     FloatLayout:
@@ -96,23 +98,23 @@ Builder.load_string("""
             Button:
                 text: 'Login'
                 size_hint: (.25,.15)
-                on_press: todo
+                on_press: root.login(name.text, room.text, hall.text)
         GridLayout:
             cols: 2
             Label:
                 text: 'Name'
-            Label:
-                text: 'Room #'
-            Label:
-                text: 'Residence Hall'
             TextInput:
                 id: name
                 multiline: False
+            Label:
+                text: 'Room #'
             TextInput:
                 id: room
                 multiline: False
+            Label:
+                text: 'Residence Hall'
             TextInput:
-                id: res_hall
+                id: hall
                 multiline: False
             Label:
                 text: ''
@@ -121,14 +123,14 @@ Builder.load_string("""
 
 <AlertScreen>:
     GridLayout:
-    rows: 3
+        rows: 3
         AnchorLayout:
             anchor_x: 'center'
             anchor_y: 'center'
             Button:
                 text: 'Send Alert'
                 size_hint: (.25,.15)
-                on_press: todo
+                on_press: root.sendAlert(alert.text)
         GridLayout:
             cols: 2
             Label:
@@ -141,7 +143,7 @@ Builder.load_string("""
             Label:
                 text: ''
         GridLayout:
-            cols = 5
+            cols: 5
             ToggleButton:
                 text: 'Basement'
                 group: 'floor'
@@ -160,12 +162,35 @@ Builder.load_string("""
                 group: 'floor'
 """)
 
+# login validation
+BuildingDict = {
+        "mosher":{"spider man": "066",
+        "doctor strange": "123",
+        "peter quill": "234",
+        "iron man": "066",
+        "incredible hulk": "456",
+        "black widow": "090",
+        "hawk eye": "270"
+}
+}
+
 # Declare both screens
 class LoginScreen(Screen):
-    pass
+    def login(self, name, room, hall):
+        if len(name) != 0 and len(room) != 0 and len(hall) != 0:
+            if hall in BuildingDict:
+                if name in BuildingDict["mosher"]:
+                    if room == BuildingDict["mosher"][name]:
+                        sm.current = 'alert'
+                    else:
+                        print("Try again...")
+            # print(name, room, hall)
 
 class AlertScreen(Screen):
-    pass
+    def sendAlert(self, alert):
+        if len(alert) != 0:
+            print(alert) # TODO connect this with dropbox
+            sm.current = 'login'
 
 # Create the screen manager
 sm = ScreenManager()
