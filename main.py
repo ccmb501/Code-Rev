@@ -259,7 +259,7 @@ class MainApp(App):
 
 # run file
 if __name__ == '__main__':
-    #MainApp().run()
+    MainApp().run()
     Clock.schedule_interval(alert_tracker_helper(), 5)
 
     '''main = MainApp()
